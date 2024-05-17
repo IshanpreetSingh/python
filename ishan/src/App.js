@@ -1,25 +1,73 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
 
-function App() {
+function BankApp() {
+  const [balance, setBalance] = useState(10000);
+  const [amount, setAmount] = useState('');
+
+  const handleWithdrawTDE = () => {
+    if (amount <= balance) {
+      setBalance(prevBalance => prevBalance - parseInt(amount));
+      setAmount('');
+    } else {
+      alert('Not Enough funds!');
+    }
+  };
+
+  const handleDepositTDE = () => {
+    setBalance(prevBalance => prevBalance + parseInt(amount));
+    setAmount('');
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <div>
+        <nav>
+       <ul>
+            <li>
+              <Link to="/">Balance</Link>
+            </li>
+            <li>
+              <Link to="/withdraw">Withdraw</Link>
+            </li>
+            <li>
+              <Link to="/deposit">Deposit</Link>
+            </li>
+      </ul>
+        </nav>
+
+        <Switch>
+          <Route path="/withdraw">
+         <div>
+              <input
+                type="number"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+              />
+              <button onClick={handleWithdrawTDE}>Withdraw</button>
+         </div>
+          </Route>
+          <Route path="/deposit">
+            <div>
+              <input
+                type="number"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+              />
+              <button onClick={handleDepositTDE}>Deposit</button>
+            </div>
+          </Route>
+          <Route path="/">
+            <div>
+              <img src="" alt="TDE Bank Logo" />
+              <h1>Welcome to TDE Bank</h1>
+              <h2>{balance} $</h2>
+            </div>
+          </Route>
+        </Switch>
+      </div>
+    </Router>
   );
 }
 
-export default App;
+export default BankApp;
